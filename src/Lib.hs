@@ -1,14 +1,18 @@
-{-# LANGUAGE OverloadedStrings, ScopedTypeVariables #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 module Lib
     ( prettify
     ) where
 
-import Data.Aeson (decode, Value(..))
+import Data.Aeson (eitherDecode, Value(..))
 import Data.Aeson.Encode.Pretty (encodePretty)
 import qualified Data.ByteString.Lazy.Char8 as LBS
 
-prettify :: LBS.ByteString -> LBS.ByteString
-prettify src = let (val :: Maybe Value) = decode src
+prettify' :: LBS.ByteString -> LBS.ByteString
+prettify' src = let (val :: Either String Value) = eitherDecode src
                 in case val of
-                    Nothing -> "invalid json"
-                    Just val' -> encodePretty val'
+                    Left err -> LBS.concat ["invalid json: ", LBS.pack err]
+                    Right val' -> encodePretty val'
+
+prettify :: String -> String
+prettify = LBS.unpack . prettify' . LBS.pack

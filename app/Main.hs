@@ -1,6 +1,5 @@
 module Main where
 
-import Lib (prettify)
 import Webview (jsFormatterWidget)
 import Reflex.Dom
 import GHCJS.DOM

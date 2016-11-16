@@ -22,6 +22,7 @@ library
                      , aeson
                      , aeson-pretty
                      , reflex-dom
+                     , lens
   default-language:    Haskell2010
 
 executable jsonFormatter
